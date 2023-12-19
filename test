@@ -1,0 +1,12 @@
+#!/bin/bash
+
+[ -z $1 ] && {
+    echo "ERROR: Missing name of directory with tests. Run like: ./test <folder-name-with-tests>"
+    exit 1
+}
+
+for file in "$1"/*
+do
+    echo "RUNNING: $file"
+    cargo run < "$file"
+done
