@@ -1,4 +1,5 @@
 use std::io;
+use std::thread;
 
 fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // initialize a new set of clauses
@@ -52,8 +53,11 @@ fn dpll(cnf_formula: Vec<Vec<i32>>) -> bool {
 
     let mut cnf_formula1 = cnf_formula.clone(); 
     cnf_formula1.push(vec![l]);
+
     let mut cnf_formula2 = cnf_formula.clone(); 
     cnf_formula2.push(vec![-l]); 
+
+
     return dpll(cnf_formula1) || dpll(cnf_formula2);
 }
 
@@ -68,10 +72,12 @@ fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
             continue;
         }
         // split the line by whitespace and parse the integers
-        let clause: Vec<i32> = line
+        let mut clause: Vec<i32> = line
             .split_whitespace()
             .map(|s| s.parse::<i32>().unwrap())
             .collect();
+
+        clause.retain(|&x| x != 0);
         // push the clause to the result vector
         result.push(clause);
     }
@@ -79,20 +85,24 @@ fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
     return result;
 }
 
-fn input() -> io::Result<String> {
-    let mut buffer: String = String::new();
-    io::stdin().read_line(&mut buffer)?;
-
-    Ok(buffer.trim_end().to_owned())
-}
-
 fn main() {
+    let mut input = String::new();
 
-    let cnf_f = input().unwrap();
+    loop {
+        let mut line = String::new();
+        io::stdin().read_line(&mut line).expect("Failed to read line");
 
-    let cnf = cnf_to_vec(cnf_f);
+        if line.is_empty() {
+            break;
+        }
+
+        input.push_str(line.as_str());
+    }
+
+    let cnf = cnf_to_vec(input);
+    //println!("{:?}", cnf);
     let result = dpll(cnf);
-
+    
     if result == false {
         println!("The formula is unsatisfiable.");
     } else {
