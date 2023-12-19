@@ -1,4 +1,4 @@
-# SAT-solver-for-Register-Allocation
+# SAT solver (za register allocation)
 
 Pokrenuti sa cargo run < test.cnf
 
