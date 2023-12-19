@@ -17,7 +17,6 @@ fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     return new_cnf_formula;
 }
 
-// choose literal function
 fn choose_literal(cnf_formula: &Vec<Vec<i32>>) -> Option<i32> {
     // for each clause in cnf_formula
     for c in cnf_formula {
@@ -95,11 +94,10 @@ fn dpll_p(cnf_formula: Vec<Vec<i32>>) -> bool {
     //let result1 = handle1.join().unwrap();
     //let result2 = handle2.join().unwrap();
 
-    
-    let result = rayon::join(|| dpll_p(cnf_formula1), || dpll_p(cnf_formula2));
-    result.0 || result.1
-
     //return dpll(cnf_formula1) || dpll(cnf_formula2);
+
+    let result = rayon::join(|| dpll_p(cnf_formula1), || dpll_p(cnf_formula2));
+    return result.0 || result.1;
 }
 
 
@@ -127,6 +125,7 @@ fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
 }
 
 fn main() {
+    // set number of threads
     let num_threads = 20;
     rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().unwrap();
 
@@ -152,20 +151,19 @@ fn main() {
     println!("Serial elapsed: {:.2?}", elapsed);
 
 
-    if result1 == false {
-        println!("The formula is unsatisfiable.");
-    } else {
+    if result1 {
         println!("The formula is satisfiable.");
+    } else {
+        println!("The formula is unsatisfiable.");
     }
 
     let now = Instant::now();
-    //let result2 = false;
     let result2 = dpll_p(cnf.clone());
     let elapsed = now.elapsed();
     println!("Parallel elapsed: {:.2?} with {} threads", elapsed, num_threads);
-    if result2 == false {
-        println!("The formula is unsatisfiable.");
-    } else {
+    if result2 {
         println!("The formula is satisfiable.");
+    } else {
+        println!("The formula is unsatisfiable.");
     }
 }
