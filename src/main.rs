@@ -1,5 +1,9 @@
 use std::io;
 use std::thread;
+use std::time::Instant;
+
+use rayon::prelude::*;
+
 
 fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // initialize a new set of clauses
@@ -30,7 +34,7 @@ fn choose_literal(cnf_formula: &Vec<Vec<i32>>) -> Option<i32> {
     return None;
 }
 
-fn dpll(cnf_formula: Vec<Vec<i32>>) -> bool {
+fn dpll_s(cnf_formula: Vec<Vec<i32>>) -> bool {
     let mut cnf_formula = cnf_formula; 
     
     // unit propagation:
@@ -57,8 +61,49 @@ fn dpll(cnf_formula: Vec<Vec<i32>>) -> bool {
     let mut cnf_formula2 = cnf_formula.clone(); 
     cnf_formula2.push(vec![-l]); 
 
+    return dpll_s(cnf_formula1) || dpll_s(cnf_formula2);
+}
 
-    return dpll(cnf_formula1) || dpll(cnf_formula2);
+fn dpll_p(cnf_formula: Vec<Vec<i32>>) -> bool {
+
+    let mut cnf_formula = cnf_formula; 
+    
+    // unit propagation:
+    while cnf_formula.iter().any(|c| c.len() == 1) {
+        // get a unit clause
+        let l = cnf_formula.iter().find(|c| c.len() == 1).unwrap()[0]; 
+        cnf_formula = unit_propagate(l, &cnf_formula);
+    }
+    
+    // cnf_formula is empty
+    if cnf_formula.is_empty() {
+        return true;
+    }
+    // cnf_formula contains an empty clause
+    if cnf_formula.contains(&Vec::new()) {
+        return false;
+    }
+    
+    let l = choose_literal(&cnf_formula).unwrap(); 
+
+    let mut cnf_formula1 = cnf_formula.clone(); 
+    cnf_formula1.push(vec![l]);
+
+    let mut cnf_formula2 = cnf_formula.clone(); 
+    cnf_formula2.push(vec![-l]); 
+
+    //let handle1 = thread::spawn(move || dpll_p(cnf_formula1));
+    //let handle2 = thread::spawn(move || dpll_p(cnf_formula2));
+
+    // Wait for the threads to finish and get their results
+    //let result1 = handle1.join().unwrap();
+    //let result2 = handle2.join().unwrap();
+
+    
+    let result = rayon::join(|| dpll_p(cnf_formula1), || dpll_p(cnf_formula2));
+    result.0 || result.1
+
+    //return dpll(cnf_formula1) || dpll(cnf_formula2);
 }
 
 
@@ -86,6 +131,9 @@ fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
 }
 
 fn main() {
+    let num_threads = 8;
+    rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().unwrap();
+
     let mut input = String::new();
 
     loop {
@@ -101,9 +149,25 @@ fn main() {
 
     let cnf = cnf_to_vec(input);
     //println!("{:?}", cnf);
-    let result = dpll(cnf);
-    
-    if result == false {
+
+    let now = Instant::now();
+    let result1 = dpll_s(cnf.clone());
+    let elapsed = now.elapsed();
+    println!("Serial elapsed: {:.2?}", elapsed);
+
+
+    if result1 == false {
+        println!("The formula is unsatisfiable.");
+    } else {
+        println!("The formula is satisfiable.");
+    }
+
+    let now = Instant::now();
+    //let result2 = false;
+    let result2 = dpll_p(cnf.clone());
+    let elapsed = now.elapsed();
+    println!("Parallel elapsed: {:.2?} with {} threads", elapsed, num_threads);
+    if result2 == false {
         println!("The formula is unsatisfiable.");
     } else {
         println!("The formula is satisfiable.");
