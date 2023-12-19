@@ -1,9 +1,5 @@
 use std::io;
-use std::thread;
 use std::time::Instant;
-
-use rayon::prelude::*;
-
 
 fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // initialize a new set of clauses
@@ -131,7 +127,7 @@ fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
 }
 
 fn main() {
-    let num_threads = 8;
+    let num_threads = 20;
     rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().unwrap();
 
     let mut input = String::new();
