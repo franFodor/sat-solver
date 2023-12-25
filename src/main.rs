@@ -1,5 +1,6 @@
 use std::io;
 use std::time::Instant;
+use std::collections::HashSet;
 
 fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // initialize a new set of clauses
@@ -38,6 +39,10 @@ fn dpll_s(cnf_formula: Vec<Vec<i32>>) -> bool {
         let l = cnf_formula.iter().find(|c| c.len() == 1).unwrap()[0]; 
         cnf_formula = unit_propagate(l, &cnf_formula);
     }
+
+    //println!("{:?}", cnf_formula);
+    cnf_formula = pure_literal(cnf_formula.clone());
+    //println!("{:?}", cnf_formula);
     
     // cnf_formula is empty
     if cnf_formula.is_empty() {
@@ -120,8 +125,26 @@ fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
         // push the clause to the result vector
         result.push(clause);
     }
-
     return result;
+}
+
+fn pure_literal(cnf_formula: Vec<Vec<i32>>) -> Vec<Vec<i32>>{
+    let mut result : Vec<Vec<i32>> = Vec::new();
+    let pure : HashSet<_> = cnf_formula.iter().flat_map(|row| row.iter()).cloned().collect();
+    //println!("pure:{:?}", pure);
+    for c in cnf_formula.iter() {
+        let mut flag = false;
+        for l in c {
+            if !pure.contains(&-l) {
+                flag = true;
+                break;
+            }
+        };
+        if !flag {
+            result.push(c.clone());
+        }
+    }
+    result
 }
 
 fn main() {
