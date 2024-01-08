@@ -75,10 +75,13 @@ fn dpll_p(cnf_formula: Vec<Vec<i32>>) -> bool {
         cnf_formula = unit_propagate(l, &cnf_formula);
     }
     
+    cnf_formula = pure_literal(cnf_formula.clone());
+
     // cnf_formula is empty
     if cnf_formula.is_empty() {
         return true;
     }
+
     // cnf_formula contains an empty clause
     if cnf_formula.contains(&Vec::new()) {
         return false;
