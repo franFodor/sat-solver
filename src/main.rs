@@ -1,6 +1,12 @@
-use std::io;
+#![allow(dead_code)]
+
+use std::io::{self, Write};
 use std::time::Instant;
 use std::collections::HashSet;
+
+use std::env;
+
+use std::fs::OpenOptions;
 
 fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // initialize a new set of clauses
@@ -108,7 +114,6 @@ fn dpll_p(cnf_formula: Vec<Vec<i32>>) -> bool {
     return result.0 || result.1;
 }
 
-
 fn cnf_to_vec(cnf: String) -> Vec<Vec<i32>> {
     // declare an empty vector of vectors
     let mut result = Vec::new();
@@ -152,7 +157,14 @@ fn pure_literal(cnf_formula: Vec<Vec<i32>>) -> Vec<Vec<i32>>{
 
 fn main() {
     // set number of threads
-    let num_threads = 20;
+    let args: Vec<_> = env::args().collect();
+    if args.len() < 1 {
+        println!("Argument error!");
+        return;
+    }
+    let num_threads = args[1].parse::<usize>().unwrap();
+    let example = &args[2];
+
     rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().unwrap();
 
     let mut input = String::new();
@@ -171,25 +183,58 @@ fn main() {
     let cnf = cnf_to_vec(input);
     //println!("{:?}", cnf);
 
+    // ODKOMENTIRAT OVO ZA SERIJSKI
+
+    
     let now = Instant::now();
-    let result1 = dpll_s(cnf.clone());
-    let elapsed = now.elapsed();
-    println!("Serial elapsed: {:.2?}", elapsed);
+    let _ = dpll_s(cnf.clone());
+    let elapsed = now.elapsed().as_millis();
+    let serial_out = format!("S,1,{:.2?},{}", elapsed, example);
+    let output_string = format!("{}", serial_out);
+    
+    
 
-
+    /*
     if result1 {
         println!("The formula is satisfiable.");
     } else {
         println!("The formula is unsatisfiable.");
     }
+    */
 
-    let now = Instant::now();
-    let result2 = dpll_p(cnf.clone());
-    let elapsed = now.elapsed();
-    println!("Parallel elapsed: {:.2?} with {} threads", elapsed, num_threads);
+    // ODKOMENTIRAT OVO ZA PARALEL
+
+     /*
+     let now = Instant::now();
+     let _ = dpll_p(cnf.clone());
+     let elapsed = now.elapsed().as_millis();
+     let parralel_out = format!("P,{},{:.2?},{}", num_threads, elapsed, example);
+     let output_string = format!("{}", parralel_out);
+     */
+    
+
+    /*
     if result2 {
         println!("The formula is satisfiable.");
     } else {
         println!("The formula is unsatisfiable.");
     }
+    */
+
+    let mut file = OpenOptions::new()
+        .write(true)
+        .append(true)
+        .open("results.txt")
+        .unwrap();
+
+    if let Err(e) = writeln!(file, "{}", output_string) {
+        eprintln!("Couldn't write to file: {}", e);
+    }
+
+    /* 
+    let path = "./results.txt";
+    let mut output = File::create(path).unwrap();
+
+    let _ = write!(output, "{}", parralel_out);*/
+
 }

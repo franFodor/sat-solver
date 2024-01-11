@@ -1,0 +1,21 @@
+#!/bin/bash
+
+[ -z $1 ] && {
+    echo "ERROR: Missing name of directory with tests. Run like: ./test <folder-name-with-tests>"
+    exit 1
+}
+
+threads=(1 2 4 8 12 16 20 32)
+
+GREEN='\033[0;36m'
+NC='\033[0m'
+
+files=($(ls $1 | sort -n))
+for file in ${files[*]}
+do
+    file="$1/$file"
+    for thread in ${threads[*]}; do
+        echo -e "${GREEN}RUNNING $file with $thread threads.${NC}"
+        cargo run $thread $(basename $file .cnf) < $file
+    done
+done
