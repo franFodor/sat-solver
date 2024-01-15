@@ -164,6 +164,7 @@ fn main() {
     }
     let num_threads = args[1].parse::<usize>().unwrap();
     let example = &args[2];
+    let variation = &args[3];
 
     rayon::ThreadPoolBuilder::new().num_threads(num_threads).build_global().unwrap();
 
@@ -181,45 +182,38 @@ fn main() {
     }
 
     let cnf = cnf_to_vec(input);
+    let mut output_string = String::new();
     //println!("{:?}", cnf);
 
-    // ODKOMENTIRAT OVO ZA SERIJSKI
+    if variation == "S" {
+        let now = Instant::now();
+        let _ = dpll_s(cnf.clone());
+        let elapsed = now.elapsed().as_millis();
+        let serial_out = format!("S,1,{:.2?},{}", elapsed, example);
+        output_string = format!("{}", serial_out);
 
-    
-    let now = Instant::now();
-    let _ = dpll_s(cnf.clone());
-    let elapsed = now.elapsed().as_millis();
-    let serial_out = format!("S,1,{:.2?},{}", elapsed, example);
-    let output_string = format!("{}", serial_out);
-    
-    
-
-    /*
-    if result1 {
-        println!("The formula is satisfiable.");
-    } else {
-        println!("The formula is unsatisfiable.");
+        /*
+        if result1 {
+            println!("The formula is satisfiable.");
+        } else {
+            println!("The formula is unsatisfiable.");
+        }
+        */
+    } else if variation == "P" {
+        let now = Instant::now();
+        let _ = dpll_p(cnf.clone());
+        let elapsed = now.elapsed().as_millis();
+        let parralel_out = format!("P,{},{:.2?},{}", num_threads, elapsed, example);
+        output_string = format!("{}", parralel_out);
+     
+        /*
+        if result2 {
+            println!("The formula is satisfiable.");
+        } else {
+            println!("The formula is unsatisfiable.");
+        }
+        */
     }
-    */
-
-    // ODKOMENTIRAT OVO ZA PARALEL
-
-     /*
-     let now = Instant::now();
-     let _ = dpll_p(cnf.clone());
-     let elapsed = now.elapsed().as_millis();
-     let parralel_out = format!("P,{},{:.2?},{}", num_threads, elapsed, example);
-     let output_string = format!("{}", parralel_out);
-     */
-    
-
-    /*
-    if result2 {
-        println!("The formula is satisfiable.");
-    } else {
-        println!("The formula is unsatisfiable.");
-    }
-    */
 
     let mut file = OpenOptions::new()
         .write(true)
@@ -230,11 +224,4 @@ fn main() {
     if let Err(e) = writeln!(file, "{}", output_string) {
         eprintln!("Couldn't write to file: {}", e);
     }
-
-    /* 
-    let path = "./results.txt";
-    let mut output = File::create(path).unwrap();
-
-    let _ = write!(output, "{}", parralel_out);*/
-
 }

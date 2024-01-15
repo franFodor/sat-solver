@@ -14,8 +14,11 @@ files=($(ls $1 | sort -n))
 for file in ${files[*]}
 do
     file="$1/$file"
+    echo "RUNNING: $file"
+    cargo run 1 $(basename $file .cnf) "S" < $file
+
     for thread in ${threads[*]}; do
         echo -e "${GREEN}RUNNING $file with $thread threads.${NC}"
-        cargo run $thread $(basename $file .cnf) < $file
+        cargo run $thread $(basename $file .cnf) "P" < $file
     done
 done
