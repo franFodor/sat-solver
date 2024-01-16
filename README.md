@@ -14,7 +14,7 @@ Skup testnih primjera se nalaze u `/tests` folderu gdje se mogu i ručno dodati 
 Nakon izvršavanja skripte rezultati će biti zapisani u datoteku `results.txt` gdje prvi red mora biti format ispisa radi crtanja grafa (`serialOrParallel,thread,duration,example`), a sljedeći redovi prikazuju rezultate konkretnog primjera u milisekundama. 
 
 ### Crtanje grafa
-Ako želimo prikazati graf postoji R skripta koja se nalazi u `doc/results_plot.Rmd` koju je potrebno otvoriti u R studiju i preimenovati `results.txt` u `results.csv` i pokrenuti ju, evenutalno promijeniti "breakove" u ovoj liniji `scale_y_continuous(breaks = c(4, 6.97, 8, 12, 16))` radi boljeg izgleda grafa.
+Ako želimo prikazati graf postoji R skripta koja se nalazi u `doc/results_plot.Rmd` koju je potrebno otvoriti u R studiju, preimenovati `results.txt` u `results.csv` i pokrenuti ju, evenutalno promijeniti "breakove" u ovoj liniji `scale_y_continuous(breaks = c(4, 6.97, 8, 12, 16))` radi boljeg izgleda grafa.
  
 ## Dokumentacija 
 Dokumentacija je pisana u Latexu pomoću IEEE predloška te se nalazi u direktoriju `doc/par_sat_solver.pdf`.
