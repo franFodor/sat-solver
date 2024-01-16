@@ -1,0 +1,32 @@
+---
+title: "Untitled"
+date: "2024-01-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(dplyr)
+library(readr)
+```
+
+```{r}
+fran <- read_csv("results.csv")
+
+serial <- filter(fran, serialOrParallel == "S")
+parallel <- filter(fran, serialOrParallel == "P")
+
+parallel_mean <- parallel %>% group_by(thread) %>% summarise(duration_mean = mean(duration))
+parallel_mean$duration_mean <- parallel_mean$duration_mean/1000
+
+
+ggplot(parallel_mean, aes(x=thread, y=duration_mean)) + geom_line(color="blue") + geom_hline(yintercept = mean(serial$duration)/1000, color = "red") + theme_classic() +
+  scale_y_continuous(breaks = c(4, 6.97, 8, 12, 16)) +
+  xlab("Number of threads") + ylab("Duration in s")
+
+ggsave("results.svg")
+
+write.csv(x = parallel_mean, "parallel_duration.csv")
+
+```
+
