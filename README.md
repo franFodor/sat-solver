@@ -4,6 +4,8 @@ Projekt iz predmeta [Paralelizam i konkurentnost](https://www.fer.unizg.hr/predm
 
 ## Općenito o projektu
 Rad je pisan u programskom jeziku Rust, te za paralelizaciju koristi "crate" Reyon. Za testiranje programa na skupu primjera napisana je bash skripta. Za pokretanje iste potrebna je unix mašina (nije moguće pokrenuti u Windowsu, osim preko WSL-a, Git basha ili sličnih stvari). Kako bi se pokrenula potrebno je izvršiti komandu `./test <ime_testnog_foldera>` dok se nalazimo u glavnom direktoriju programa.  
+
+#### Troubleshoot skripte
 **Napomena** ako se repozitorij skine na Windowsu, postoji mogućnost da će Windows automatski promijeniti znakove novog reda u skripti te ona više neće raditi (dobit će se error `bash bad interpreter`), kako bi se to izbjeglo repozitorij je potrebno skinuti odmah na unix sistemu ili skinuti program poput `dos2unix` koji će te znakove prebaciti nazad.  
 **Napomena 2** ako se skripta ne želi izvršiti pokrenuti komandu `sudo chmod u+x <skripta>`
 
@@ -13,7 +15,7 @@ Skup testnih primjera se nalaze u `/tests` folderu gdje se mogu i ručno dodati 
 ## Rezultati 
 Nakon izvršavanja skripte rezultati će biti zapisani u datoteku `results.txt` gdje prvi red mora biti format ispisa radi crtanja grafa (`serialOrParallel,thread,duration,example`), a sljedeći redovi prikazuju rezultate konkretnog primjera u milisekundama. 
 
-### Crtanje grafa
+#### Crtanje grafa
 Ako želimo prikazati graf postoji R skripta koja se nalazi u `doc/results_plot.Rmd` koju je potrebno otvoriti u R studiju, preimenovati `results.txt` u `results.csv` i pokrenuti ju, evenutalno promijeniti "breakove" u ovoj liniji `scale_y_continuous(breaks = c(4, 6.97, 8, 12, 16))` radi boljeg izgleda grafa.
  
 ## Dokumentacija 
