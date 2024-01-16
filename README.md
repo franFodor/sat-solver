@@ -1,11 +1,18 @@
-# SAT solver (for register allocation)
+# SAT solver (za alokaciju registara)
 
-Pokrenuti sa cargo run < test.cnf
+Projekt iz predmeta [Paralelizam i konkurentnost](https://www.fer.unizg.hr/predmet/pik) na temu ubrzanja (paraleliziranja) SAT solvera.  
 
-U mainu se moze podesit broj dretvi
+## Općenito o projektu
+Rad je pisan u programskom jeziku Rust, te za paralilizaciju koristi "crate" Reyon. Za testiranje programa na skupu primjera napisana je bash skripta. Za pokretanje iste potrebna je unix mašina (nije moguće pokrenuti u Windowsu, osim preko WSL-a ili sličnih stvari). Kako bi se pokrenula potrebno je izvršiti komandu `./test <ime_testnog_foldera>` dok se nalazimo u glavnom direktoriju programa. **Napomena** ukoliko se repozitorij skine na windowsu, windows će automatski promijeniti znakove novog reda u skripti te ona više neće raditi (dobit će se error `bash bad interpreter`), kako bi se to izbjeglo repozitorij je potrebno skinuti odmah na unix sistemu ili skinuti program poput `dos2unix` koji će te znakove prebaciti nazad. **Napomena 2** ukoliko se skripta ne želi izvršiti pokrenuti komandu `sudo chmod u+x <skripta>`
 
-Testovi se nalaze [ovdje](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html)
+## Testni primjeri
+Skup testinh primjera se nalaze u `/tests` folderu gdje se mogu i ručno dodati razni testovi. Testovi su preuzeti sa [ove](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html) stranice, konkretno `CBS_k3_n100_m449_b90` skup. Ukoliko se želi promijeniti testni skup potrebno je skinuti neki od primjere sa stranice (ili napisati svoje) i radi lakšeg crtanja grafa potrebno je promijeniti ime primjera u `redni_broj.cnf`, sljedeće se može napraviti pomoću komande `(paste <(ls)  <(ls | nl | cut -f1) | xargs -n 1 echo | xargs -n 2 mv) && ls | xargs -I xx mv xx xx.cnf` u testnom folderu. Također je u skripti moguće promijeniti broj dretvi za koje želimo izvršiti test, u liniji `threads=(1 2 4 8 12 16 20 32)` dodati broj koji želimo (ili maknuti one koje ne želimo). 
 
-Zasad staviti u test.cnf file zeljeni test ili pokrenut sa skriptom testni folder (ne preporucam jer ce vjerojatno jako drugo trebat da se sve zavrsi, ovaj u test.cnf je dosta dobar za demonstrirat ubrzanje uz paralelnost)
+## Rezultati 
+Nakon izvršavanja skripte rezultati će biti zapisani u datoteku `results.txt` gdje prvi red mora biti format ispisa radi crtanja grafa (`serialOrParallel,thread,duration,example`). 
 
-Treba jos napisat funkciju za pure literal elimination - optimizacijski dio
+### Crtanje grafa
+Ako želimo prikazati graf postoji R skripta koja se nalazi u `doc/results_plot.Rmd` koju je potrebno otvoriti u R studiu i preimenovati `results.txt` u `results.csv` i pokrenuti ju, evenutalno promijeniti "breakove" u ovoj liniji `scale_y_continuous(breaks = c(4, 6.97, 8, 12, 16))` radi boljeg izgleda grafa.
+ 
+## Dokumentacija 
+Dokumentacija je pisana u Latexu pomoću IEEE predloška te se nalazi u direktoriju `doc/par_sat_solver.pdf`.
