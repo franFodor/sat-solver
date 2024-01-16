@@ -9,7 +9,7 @@ Rad je pisan u programskom jeziku Rust, te za paralilizaciju koristi "crate" Rey
 Skup testinh primjera se nalaze u `/tests` folderu gdje se mogu i ručno dodati razni testovi. Testovi su preuzeti sa [ove](https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html) stranice, konkretno `CBS_k3_n100_m449_b90` skup. Ukoliko se želi promijeniti testni skup potrebno je skinuti neki od primjere sa stranice (ili napisati svoje) i radi lakšeg crtanja grafa potrebno je promijeniti ime primjera u `redni_broj.cnf`, sljedeće se može napraviti pomoću komande `(paste <(ls)  <(ls | nl | cut -f1) | xargs -n 1 echo | xargs -n 2 mv) && ls | xargs -I xx mv xx xx.cnf` u testnom folderu. Također je u skripti moguće promijeniti broj dretvi za koje želimo izvršiti test, u liniji `threads=(1 2 4 8 12 16 20 32)` dodati broj koji želimo (ili maknuti one koje ne želimo). 
 
 ## Rezultati 
-Nakon izvršavanja skripte rezultati će biti zapisani u datoteku `results.txt` gdje prvi red mora biti format ispisa radi crtanja grafa (`serialOrParallel,thread,duration,example`). 
+Nakon izvršavanja skripte rezultati će biti zapisani u datoteku `results.txt` gdje prvi red mora biti format ispisa radi crtanja grafa (`serialOrParallel,thread,duration,example`), a sljedeći redovi prikazuju rezultate konkretnog primjera u milisekundama. 
 
 ### Crtanje grafa
 Ako želimo prikazati graf postoji R skripta koja se nalazi u `doc/results_plot.Rmd` koju je potrebno otvoriti u R studiu i preimenovati `results.txt` u `results.csv` i pokrenuti ju, evenutalno promijeniti "breakove" u ovoj liniji `scale_y_continuous(breaks = c(4, 6.97, 8, 12, 16))` radi boljeg izgleda grafa.
