@@ -3,7 +3,7 @@
 Projekt iz predmeta [Paralelizam i konkurentnost](https://www.fer.unizg.hr/predmet/pik) na temu ubrzanja (paraleliziranja) SAT solvera.  
 
 ## Općenito o projektu
-Rad je pisan u programskom jeziku Rust, te za paralelizaciju koristi "crate" Reyon. Za testiranje programa na skupu primjera napisana je bash skripta. Za pokretanje iste potrebna je unix mašina (nije moguće pokrenuti u Windowsu, osim preko WSL-a ili sličnih stvari). Kako bi se pokrenula potrebno je izvršiti komandu `./test <ime_testnog_foldera>` dok se nalazimo u glavnom direktoriju programa.  
+Rad je pisan u programskom jeziku Rust, te za paralelizaciju koristi "crate" Reyon. Za testiranje programa na skupu primjera napisana je bash skripta. Za pokretanje iste potrebna je unix mašina (nije moguće pokrenuti u Windowsu, osim preko WSL-a, Git basha ili sličnih stvari). Kako bi se pokrenula potrebno je izvršiti komandu `./test <ime_testnog_foldera>` dok se nalazimo u glavnom direktoriju programa.  
 **Napomena** ako se repozitorij skine na Windowsu, postoji mogućnost da će Windows automatski promijeniti znakove novog reda u skripti te ona više neće raditi (dobit će se error `bash bad interpreter`), kako bi se to izbjeglo repozitorij je potrebno skinuti odmah na unix sistemu ili skinuti program poput `dos2unix` koji će te znakove prebaciti nazad.  
 **Napomena 2** ako se skripta ne želi izvršiti pokrenuti komandu `sudo chmod u+x <skripta>`
 
