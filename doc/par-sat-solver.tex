@@ -15,6 +15,7 @@
 \usepackage{listings, listings-rust}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+\usepackage[croatian]{babel}
 \begin{document}
 \SetKwComment{Comment}{/* }{ */}
 
@@ -50,7 +51,7 @@ SAT, prevodilac, paralelizacija, bojanje grafa, CNF, Rust, alokacija registara
 \section{Uvod}
 Moderna računala pokušavaju poboljšati svoje performanse na razne načine, kroz sklopovska rješenja, ali i programska rješenja. Kako bi se povećala performansa izvođenja nekog programa na računalu, razmatra se kvaliteta strojnog koda koji se izravno izvodi na računalnom sklopovlju te načini kako povećati istu. S obzirom na to kako su računala fizički izvedena, resursi kojima računalo raspolaže su ograničeni. Rad procesora računala najopćenitije možemo svesti na dvije faze, a to su dohvaćanje i izvršavanje instrukcija. Dohvaćanje instrukcija uključuje pristup memoriji, što može biti skupo s obzirom na to kako današnji procesori rade na znatno većoj frekvenciji signala takta u odnosu na radnu memoriju. Tom problemu dugog pristupa radnoj memoriji doskočilo se priručnim memorijama. Osim instrukcija, procesor također dohvaća i podatke iz memorije te ih sprema u registre. Svi ili gotovo svi današnji procesori su registarski orijentirani, odnosno podatke spremaju u registre te sve operacije izvode nad njima. Glavna prednost registara nad memorijom bilo koje vrste je vrijeme pristupa koje kod registara poprima najmanji iznos. S druge strane, nedostatak registara je njihov ograničen broj. Lako je zaključiti kako je cilj da program napisan u nekom višem programskom jeziku preveden u asemblerski jezik što bolje upotrebljava ograničen skup registara s kojima procesor raspolaže. To je jedan od zadataka prevodioca, točnije kompilatora. Prevodilac na temelju ranije izgrađenog međukoda određuje raspon unutar kojeg se upotrebljava varijabla te se na temelju tih raspona gradi graf zavisnosti. Općenito graf se sastoji od svojih vrhova i bridova, a u ovom konkretnom slučaju vrhovi su varijable međukoda, a bridovi između dva vrha postoje ako postoji međuovisnost između raspona dvije varijable. Nad tako izgrađenim grafom potrebno je provesti bojanje. Jedan od načina za bojanje grafa je preko SAT-rješavača. SAT-rješavači na temelju dane Booleove formule pokušavaju odrediti postoji li rješenje za danu formulu. Dodjeljivanjem boja varijablama međukoda, zapravo se radi alokacija registara. Dijelovi rada SAT-rješavača su neovisni pa se stoga mogu pokušati izvoditi konkurentno, odnosno paralelno na više jezgri računala te tako postići ubrzanje rada, odnosno povećanje performansi.
 
-\section{Background}
+\section{Pozadina}
 
 \subsection{Alokacija registara}
 
@@ -238,11 +239,11 @@ Budući rad mogao bi se posvetiti poboljšanju sadašnjeg paralelnog algoritma n
 
 \begin{thebibliography}{00}
 \bibitem{b1} K. D. Cooper and L. Torczon, ``Engineering a Compiler'', 3rd ed., Elsevier, 2022, pp. 663--712
-\bibitem{b2} DPLL algorithm (2023). [Online] Available: \url{https://en.wikipedia.org/wiki/DPLL_algorithm}
+\bibitem{b2} DPLL algorithm (2023). [Online] Dostupno: \url{https://en.wikipedia.org/wiki/DPLL_algorithm}
 \bibitem{b3} J. L. Hennessy and D. A. Patterson, ``Computer architecture: a quantitative approach'', 6th ed., Elsevier, 2017, p. 5
-\bibitem{b4} M. Dey and A. Bagchi. ``Satisfiability Methods for Colouring Graphs'', 2013. [Online] Available:
+\bibitem{b4} M. Dey and A. Bagchi. ``Satisfiability Methods for Colouring Graphs'', 2013. [Online] Dostupno:
 \url{https://www.researchgate.net/publication/268460124_Satisfiability_Methods_for_Colouring_Graphs/fulltext/5721424d08ae0926eb45bd3f/Satisfiability-Methods-for-Colouring-Graphs.pdf}
-\bibitem{b5} ``SATLIB - Benchmark Problems'' (2011). [Online] Available:
+\bibitem{b5} ``SATLIB - Benchmark Problems'' (2011). [Online] Dostupno:
 \url{https://www.cs.ubc.ca/~hoos/SATLIB/benchm.html}
 \end{thebibliography}
 \vspace{12pt}
