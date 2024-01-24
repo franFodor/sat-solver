@@ -1,21 +1,55 @@
-\documentclass[hidelinks, conference]{IEEEtran}
+\documentclass[conference]{IEEEtran}
 \IEEEoverridecommandlockouts
-% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
+\usepackage[a4paper, total={184mm,239mm}]{geometry}
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
 \usepackage[T1]{fontenc}
-\usepackage[margin=3cm]{geometry}
 \usepackage{algorithm2e}
 \usepackage{hyperref}
 \usepackage[inkscapeformat=png]{svg}
 \usepackage{listings, listings-rust}
-\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
-    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 \usepackage[croatian]{babel}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[normalem]{ulem}
+\useunder{\uline}{\ul}{}
+\usepackage{url}
+\usepackage{fancyvrb}
+
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{Cstyle}{
+    language=C,
+    aboveskip=3mm,
+    belowskip=3mm,
+    showstringspaces=false,
+    columns=flexible,
+    basicstyle={\small\ttfamily},
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{mGreen},
+    stringstyle=\color{mPurple},
+    breaklines=true,
+    breakatwhitespace=true,
+    tabsize=2,
+    numbers=left,
+    xleftmargin=2em,
+    frame=single,
+    framexleftmargin=1.5em,
+    captionpos=b
+}
 \begin{document}
 \SetKwComment{Comment}{/* }{ */}
 
@@ -255,6 +289,7 @@ U ovom dodatku prikazani su važni dijelovi koda u programskom jeziku Rust koji 
 
 \hrule
 
+\lstset{style=Cstyle}
 \begin{lstlisting}[label={lst:rust},language=Rust]
 fn unit_propagate(l: i32, cnf_formula: &Vec<Vec<i32>>) -> Vec<Vec<i32>> {
     // initialize a new set of clauses
